@@ -1,4 +1,5 @@
 package com.xyls.wechat.appwechat.controller;
+
 import com.xyls.wechat.appwechat.dto.form.PostForm;
 import com.xyls.wechat.appwechat.dto.support.ServerResponse;
 import com.xyls.wechat.appwechat.service.PostService;
@@ -29,29 +30,28 @@ public class PostController {
     private MessageSource messageSource;
 
 
-
     @GetMapping("list")
-    public ServerResponse list(@PageableDefault(size = 8,sort = {"top","createTime"},direction = Sort.Direction.DESC) Pageable page){
+    public ServerResponse list(@PageableDefault(size = 8, sort = {"top", "createTime"}, direction = Sort.Direction.DESC) Pageable page) {
 
-        if(page.getPageSize() > 8){
+        if (page.getPageSize() > 8) {
             return ServerResponse.failure("参数非法");
         }
-        try{
+        try {
             return ServerResponse.success(postService.findAll(page));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }
 
 
     @PostMapping("send")
-    public ServerResponse send(@RequestBody @Valid PostForm postForm, HttpServletRequest request, BindingResult result){
+    public ServerResponse send(@RequestBody @Valid PostForm postForm, HttpServletRequest request, BindingResult result) {
 
-        try{
-            ValidateForm.validate(result,messageSource);
+        try {
+            ValidateForm.validate(result, messageSource);
             postForm.setIp(request.getRemoteHost());
-            return ServerResponse.success(postService.sendPost(postForm,request));
-        }catch (Exception e){
+            return ServerResponse.success(postService.sendPost(postForm, request));
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }

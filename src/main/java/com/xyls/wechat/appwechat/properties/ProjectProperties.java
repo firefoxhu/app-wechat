@@ -11,6 +11,6 @@ public class ProjectProperties {
     /**
      * 文件上传服务配置
      */
-    private FileProperties file=new FileProperties();
+    private FileProperties file = new FileProperties();
 
 }

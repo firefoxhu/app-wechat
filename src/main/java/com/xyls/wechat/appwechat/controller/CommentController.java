@@ -31,30 +31,29 @@ public class CommentController {
 
 
     @GetMapping("list")
-    public ServerResponse list(@PageableDefault(size = 8) Pageable page,String id){
+    public ServerResponse list(@PageableDefault(size = 8) Pageable page, String id) {
 
-        if(id == null){
+        if (id == null) {
             return ServerResponse.failure("参数非法");
         }
-        try{
-            return ServerResponse.success(commentService.query(page,id));
-        }catch (Exception e){
+        try {
+            return ServerResponse.success(commentService.query(page, id));
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }
 
 
     @PostMapping("article")
-    public ServerResponse article(@RequestBody @Valid CommentForm commentForm, HttpServletRequest request, BindingResult result){
+    public ServerResponse article(@RequestBody @Valid CommentForm commentForm, HttpServletRequest request, BindingResult result) {
 
-        try{
-            ValidateForm.validate(result,messageSource);
-            return ServerResponse.success(commentService.comment(request,commentForm));
-        }catch (Exception e){
+        try {
+            ValidateForm.validate(result, messageSource);
+            return ServerResponse.success(commentService.comment(request, commentForm));
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }
-
 
 
 }

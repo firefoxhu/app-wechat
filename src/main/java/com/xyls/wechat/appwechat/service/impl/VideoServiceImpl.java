@@ -30,13 +30,13 @@ public class VideoServiceImpl implements VideoService {
         Map<String, Object> result = new HashMap<>();
         Page<Video> page = videoRepository.findByVideoTypeId(category, pageable);
         result.put(MapKeyConst.HAS_NEXT, page.hasNext());
-        result.put(MapKeyConst.LIST,page.getContent().stream().map(e->{
-                VideoDTO videoDTO = new VideoDTO();
-                BeanUtils.copyProperties(e,videoDTO);
-                videoDTO.setPic(projectProperties.getFile().getUrlPrefix()+e.getPic());
-                videoDTO.setUrl(projectProperties.getFile().getUrlPrefix()+e.getUrl());
-                return videoDTO;
-            })
+        result.put(MapKeyConst.LIST, page.getContent().stream().map(e -> {
+                    VideoDTO videoDTO = new VideoDTO();
+                    BeanUtils.copyProperties(e, videoDTO);
+                    videoDTO.setPic(projectProperties.getFile().getUrlPrefix() + e.getPic());
+                    videoDTO.setUrl(projectProperties.getFile().getUrlPrefix() + e.getUrl());
+                    return videoDTO;
+                })
         );
         return result;
     }

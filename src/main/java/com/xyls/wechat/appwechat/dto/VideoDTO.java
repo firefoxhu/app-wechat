@@ -21,7 +21,7 @@ public class VideoDTO {
 
     private String pic;
 
-    private String  playNumber;
+    private String playNumber;
 
     private String author;
 

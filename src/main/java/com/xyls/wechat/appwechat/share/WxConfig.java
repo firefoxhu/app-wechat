@@ -1,4 +1,5 @@
 package com.xyls.wechat.appwechat.share;
+
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,10 @@ public class WxConfig {
 
     /**
      * 外部获取签名入口
+     *
      * @return
      */
-    public  Map<String, Object> getSignature(String appId, String secret,String url){
+    public Map<String, Object> getSignature(String appId, String secret, String url) {
 
 
         Object cacheAccessToken = redisTemplate.opsForValue().get(TOKEN);
@@ -52,51 +54,49 @@ public class WxConfig {
         Object ticketAccessToken = redisTemplate.opsForValue().get(TICKET);
 
 
+        if (cacheAccessToken != null || ticketAccessToken != null) {
 
-        if(cacheAccessToken != null || ticketAccessToken != null) {
+            Token accessToken = (Token) cacheAccessToken;
 
-            Token accessToken = (Token)cacheAccessToken;
+            Token ticketToken = (Token) ticketAccessToken;
 
-            Token ticketToken = (Token)ticketAccessToken;
-
-            if(!accessToken.isExpried() && !ticketToken.isExpried()){
+            if (!accessToken.isExpried() && !ticketToken.isExpried()) {
                 return redisTemplate.opsForHash().entries("data");
             }
         }
-
 
 
         //获取access_token
         String accessUrl = access_token_url.replace("APPID", appId).replace("APPSECRET", secret);
         JSONObject accessJson = httpRequest(accessUrl, "GET", null);
         // 如果请求成功
-        Token access_token =null;
+        Token access_token = null;
         if (null != accessJson) {
-            access_token = new Token(accessJson.getString("access_token"),accessJson.getIntValue("expires_in"));// 正常过期时间是7200秒
+            access_token = new Token(accessJson.getString("access_token"), accessJson.getIntValue("expires_in"));// 正常过期时间是7200秒
         }
-        if( access_token == null) return null;
+        if (access_token == null) return null;
 
         String ticketUrl = jsapi_ticket_url.replace("ACCESS_TOKEN", access_token.getToken());
         JSONObject ticketJson = httpRequest(ticketUrl, "GET", null);
         // 如果请求成功
-        Token token2=null;
+        Token token2 = null;
         if (null != ticketUrl) {
             token2 = new Token(ticketJson.getIntValue("expires_in"));
             token2.setTicket(ticketJson.getString("ticket"));
         }
         long timstamp = System.currentTimeMillis();
         // 生成签名的随机串
-        String noncestr =RandomStringUtils.random(4,"utf-8");
-        String signature = signature(token2.getTicket(),timstamp+"", noncestr,url);
+        String noncestr = RandomStringUtils.random(4, "utf-8");
+        String signature = signature(token2.getTicket(), timstamp + "", noncestr, url);
         Map<String, Object> map = new HashMap<>();
         map.put("appId", appId);
         map.put("timestamp", timstamp);
         map.put("nonceStr", noncestr);
         map.put("signature", signature);
 
-        redisTemplate.opsForValue().set(TOKEN,access_token,3600, TimeUnit.SECONDS);
-        redisTemplate.opsForValue().set(TICKET,token2,3600, TimeUnit.SECONDS);
-        redisTemplate.opsForHash().putAll("data",map);
+        redisTemplate.opsForValue().set(TOKEN, access_token, 3600, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(TICKET, token2, 3600, TimeUnit.SECONDS);
+        redisTemplate.opsForHash().putAll("data", map);
 
         return map;
     }
@@ -107,14 +107,14 @@ public class WxConfig {
      * @param timestamp
      * @return
      */
-    private static String signature(String jsapi_ticket, String timestamp, String noncestr,String url) {
-        String[] paramArr = new String[] { "jsapi_ticket=" + jsapi_ticket,
-                "timestamp=" + timestamp, "noncestr=" + noncestr, "url=" + url };
+    private static String signature(String jsapi_ticket, String timestamp, String noncestr, String url) {
+        String[] paramArr = new String[]{"jsapi_ticket=" + jsapi_ticket,
+                "timestamp=" + timestamp, "noncestr=" + noncestr, "url=" + url};
         Arrays.sort(paramArr);
         // 将排序后的结果拼接成一个字符串
-        String content = paramArr[0].concat("&"+paramArr[1]).concat("&"+paramArr[2])
-                .concat("&"+paramArr[3]);
-        System.out.println("拼接之后的content为:"+content);
+        String content = paramArr[0].concat("&" + paramArr[1]).concat("&" + paramArr[2])
+                .concat("&" + paramArr[3]);
+        System.out.println("拼接之后的content为:" + content);
         String gensignature = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -138,7 +138,7 @@ public class WxConfig {
      * @param requestUrl    请求地址
      * @param requestMethod 请求方式（GET、POST）
      * @param outputStr     提交的数据
-     * @return JSONObject(通过JSONObject.get(key)的方式获取json对象的属性值)
+     * @return JSONObject(通过JSONObject.get ( key)的方式获取json对象的属性值)
      */
     private static JSONObject httpRequest(String requestUrl, String requestMethod, String outputStr) {
         JSONObject jsonObject = null;
@@ -211,8 +211,8 @@ public class WxConfig {
      * @return
      */
     private static String byteToHexStr(byte mByte) {
-        char[] Digit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
-                'B', 'C', 'D', 'E', 'F' };
+        char[] Digit = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
+                'B', 'C', 'D', 'E', 'F'};
         char[] tempArr = new char[2];
         tempArr[0] = Digit[(mByte >>> 4) & 0X0F];
         tempArr[1] = Digit[mByte & 0X0F];

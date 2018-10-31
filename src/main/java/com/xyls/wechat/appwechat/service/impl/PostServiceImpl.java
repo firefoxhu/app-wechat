@@ -1,4 +1,5 @@
 package com.xyls.wechat.appwechat.service.impl;
+
 import com.google.common.collect.Maps;
 import com.xyls.wechat.appwechat.consts.MapKeyConst;
 import com.xyls.wechat.appwechat.dto.PostDTO;
@@ -40,17 +41,17 @@ public class PostServiceImpl implements PostService {
     public Map<String, Object> findAll(Pageable pageable) {
 
 
-        Page<Post> postPage=postRepository.findAll((root, query, cb)-> cb.and(cb.equal(root.get("status"),"0")),pageable);
+        Page<Post> postPage = postRepository.findAll((root, query, cb) -> cb.and(cb.equal(root.get("status"), "0")), pageable);
 
-        Map<String,Object> result = Maps.newHashMap();
+        Map<String, Object> result = Maps.newHashMap();
 
-        result.put(MapKeyConst.HAS_NEXT,postPage.hasNext());
+        result.put(MapKeyConst.HAS_NEXT, postPage.hasNext());
 
-        result.put(MapKeyConst.LIST,postPage.getContent().stream().map(e-> {
+        result.put(MapKeyConst.LIST, postPage.getContent().stream().map(e -> {
             PostDTO postDTO = new PostDTO();
-            BeanUtils.copyProperties(e,postDTO);
-            String[] temp = StringUtils.split(e.getPic()!= null ? e.getPic():"",",");
-            for (int i=0;i<temp.length;i++){
+            BeanUtils.copyProperties(e, postDTO);
+            String[] temp = StringUtils.split(e.getPic() != null ? e.getPic() : "", ",");
+            for (int i = 0; i < temp.length; i++) {
                 temp[i] = projectProperties.getFile().getUrlPrefix().concat(temp[i]);
             }
             postDTO.setPic(temp);
@@ -61,38 +62,38 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public PostForm sendPost(PostForm postForm,HttpServletRequest request) {
+    public PostForm sendPost(PostForm postForm, HttpServletRequest request) {
 
-        if(this.todayCountByIp(postForm.getIp()) >= 5){
+        if (this.todayCountByIp(postForm.getIp()) >= 5) {
             throw new RuntimeException("为了系统不被灌水，限制每人最多发5个消息，请原谅...");
         }
 
 
-        String[] images = postForm.getPic() == "" ? new String[]{}: postForm.getPic().split(",");
+        String[] images = postForm.getPic() == "" ? new String[]{} : postForm.getPic().split(",");
 
         try {
 
-            if(images.length != 0){
+            if (images.length != 0) {
                 File path = new File(ResourceUtils.getURL("classpath:").getPath());
-                if(!path.exists())
+                if (!path.exists())
                     path = new File("");
 
-                File upload = new File(path.getAbsolutePath(),projectProperties.getFile().getFileTemp());
-                if(!upload.exists()) upload.mkdirs();
+                File upload = new File(path.getAbsolutePath(), projectProperties.getFile().getFileTemp());
+                if (!upload.exists()) upload.mkdirs();
 
-                String destDir =upload.getAbsolutePath();
+                String destDir = upload.getAbsolutePath();
 
-                String destFolderName = projectProperties.getFile().getFileDir()+"/"+DateUtil.todayDate();
+                String destFolderName = projectProperties.getFile().getFileDir() + "/" + DateUtil.todayDate();
 
                 File destFile = new File(destFolderName);
 
-                if(!destFile.exists()) destFile.mkdirs();
+                if (!destFile.exists()) destFile.mkdirs();
 
-                for(String image:images){
+                for (String image : images) {
                     try {
-                        File sourceFile = new File(destDir+image);
-                        if(sourceFile.isFile() && sourceFile.exists()) {
-                            FileUtils.copyFile(sourceFile,new File(destFolderName+image));
+                        File sourceFile = new File(destDir + image);
+                        if (sourceFile.isFile() && sourceFile.exists()) {
+                            FileUtils.copyFile(sourceFile, new File(destFolderName + image));
                             sourceFile.delete();
                         }
 
@@ -107,15 +108,15 @@ public class PostServiceImpl implements PostService {
             e.printStackTrace();
         }
         String[] fileName = new String[images.length];
-        for(int i=0;i<fileName.length;i++){
-            fileName[i] = projectProperties.getFile().getFolderPrefix()+"/"+DateUtil.todayDate()+images[i];
+        for (int i = 0; i < fileName.length; i++) {
+            fileName[i] = projectProperties.getFile().getFolderPrefix() + "/" + DateUtil.todayDate() + images[i];
         }
 
         Post post = new Post();
-        BeanUtils.copyProperties(postForm,post);
+        BeanUtils.copyProperties(postForm, post);
         post.setPid(GenKeyUtil.key());
         // 设置图片的名称保持和主键一致最好
-        post.setPic(StringUtils.join(fileName,","));
+        post.setPic(StringUtils.join(fileName, ","));
         post.setStatus("0");
         post.setTop("0");
         post.setCreateDate(DateUtil.todayDate());
@@ -127,6 +128,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public long todayCountByIp(String ip) {
-        return postRepository.countPostByCreateDateAndIp(DateUtil.todayDate(),ip);
+        return postRepository.countPostByCreateDateAndIp(DateUtil.todayDate(), ip);
     }
 }

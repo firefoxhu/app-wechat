@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface NewsTypeService {
 
-    Map<String,Object> findCategory(Pageable pageable,String classId);
+    Map<String, Object> findCategory(Pageable pageable, String classId);
 }

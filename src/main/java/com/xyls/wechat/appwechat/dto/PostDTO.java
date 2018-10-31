@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostDTO {
 
-    private String  pid;
+    private String pid;
 
     private String content;
 
-    private String  concat;
+    private String concat;
 
-    private String[]  pic;
+    private String[] pic;
 
     private String top;
 

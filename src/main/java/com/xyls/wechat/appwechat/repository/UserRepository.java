@@ -1,4 +1,5 @@
 package com.xyls.wechat.appwechat.repository;
+
 import com.xyls.wechat.appwechat.model.User;
 import org.springframework.stereotype.Repository;
 

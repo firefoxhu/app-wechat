@@ -21,11 +21,11 @@ public class SearchController {
     private SearchProcessor searchProcessor;
 
     @GetMapping("search")
-    public ServerResponse search(@PageableDefault(size = 8) Pageable page, @RequestParam("keyWord") String key){
+    public ServerResponse search(@PageableDefault(size = 8) Pageable page, @RequestParam("keyWord") String key) {
 
-        try{
-            return ServerResponse.success(searchProcessor.search(key,page));
-        }catch (Exception e){
+        try {
+            return ServerResponse.success(searchProcessor.search(key, page));
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
 

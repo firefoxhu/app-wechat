@@ -21,10 +21,10 @@ public class NewsTypeController {
     private NewsTypeService newsTypeService;
 
     @GetMapping
-    public ServerResponse category(@PageableDefault(size = 14) Pageable page,String classId){
-        try{
-            return ServerResponse.success(newsTypeService.findCategory(page,classId));
-        }catch (Exception e){
+    public ServerResponse category(@PageableDefault(size = 14) Pageable page, String classId) {
+        try {
+            return ServerResponse.success(newsTypeService.findCategory(page, classId));
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }

@@ -11,7 +11,7 @@ public class NewsDTO implements Serializable {
 
     private String id;
 
-    private String  title;
+    private String title;
 
     private String views;
 

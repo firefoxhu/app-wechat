@@ -36,6 +36,4 @@ public class Comment {
     private String createTime;
 
 
-
-
 }

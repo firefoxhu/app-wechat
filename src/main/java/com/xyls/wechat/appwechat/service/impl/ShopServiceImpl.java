@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ShopServiceImpl implements ShopService{
+public class ShopServiceImpl implements ShopService {
 
     @Autowired
     private ShopRepository shopRepository;
@@ -37,14 +37,14 @@ public class ShopServiceImpl implements ShopService{
 
         Page<Shop> page = shopRepository.findAll(pageable);
 
-        List<ShopDTO> shopDTOList = Shop2DTOConvert.shop2Dto(page,projectProperties.getFile().getUrlPrefix());
+        List<ShopDTO> shopDTOList = Shop2DTOConvert.shop2Dto(page, projectProperties.getFile().getUrlPrefix());
 
-        if(shopDTOList.size() > 0){
+        if (shopDTOList.size() > 0) {
             List<User> users = userRepository.findAllById(Shop2DTOConvert.shopOwners(page));
 
-            for(ShopDTO shopDTO:shopDTOList){
-                for(User user:users){
-                    if(StringUtils.equals(shopDTO.getUserId(),user.getUserId())){
+            for (ShopDTO shopDTO : shopDTOList) {
+                for (User user : users) {
+                    if (StringUtils.equals(shopDTO.getUserId(), user.getUserId())) {
                         shopDTO.setUserName(user.getUserNickName());
                         shopDTO.setPhone(user.getPhone());
                         break;
@@ -54,11 +54,11 @@ public class ShopServiceImpl implements ShopService{
 
         }
 
-        Map<String, Object>  result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
 
-        result.put(MapKeyConst.LIST,shopDTOList);
+        result.put(MapKeyConst.LIST, shopDTOList);
 
-        result.put(MapKeyConst.HAS_NEXT,page.hasNext());
+        result.put(MapKeyConst.HAS_NEXT, page.hasNext());
 
         return result;
     }

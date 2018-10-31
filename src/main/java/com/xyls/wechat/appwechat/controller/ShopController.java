@@ -21,10 +21,10 @@ public class ShopController {
     private ShopService shopService;
 
     @GetMapping
-    public ServerResponse shop(@PageableDefault(size = 6) Pageable page){
-        try{
+    public ServerResponse shop(@PageableDefault(size = 6) Pageable page) {
+        try {
             return ServerResponse.success(shopService.findShop(page));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }

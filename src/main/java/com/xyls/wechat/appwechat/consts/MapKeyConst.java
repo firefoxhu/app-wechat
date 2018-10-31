@@ -4,6 +4,6 @@ public interface MapKeyConst {
 
     String LIST = "list";
 
-    String  HAS_NEXT = "hasNext";
+    String HAS_NEXT = "hasNext";
 
 }

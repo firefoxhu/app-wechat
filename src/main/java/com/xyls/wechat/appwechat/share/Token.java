@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public class Token implements Serializable {
 
 
-
     private String token;
 
     private String ticket;
@@ -22,7 +21,7 @@ public class Token implements Serializable {
         this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
     }
 
-    public Token(String token,int expireIn){
+    public Token(String token, int expireIn) {
         this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
         this.token = token;
     }
@@ -30,7 +29,6 @@ public class Token implements Serializable {
     public boolean isExpried() {
         return LocalDateTime.now().isAfter(expireTime);
     }
-
 
 
 }

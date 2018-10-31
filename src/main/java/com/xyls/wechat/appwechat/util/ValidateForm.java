@@ -1,4 +1,5 @@
 package com.xyls.wechat.appwechat.util;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -10,23 +11,23 @@ import java.util.Locale;
 
 public class ValidateForm {
 
-    public static void validate(BindingResult result, MessageSource messageSource){
-        if(result.hasErrors()){
-            StringBuffer msg=new StringBuffer();
+    public static void validate(BindingResult result, MessageSource messageSource) {
+        if (result.hasErrors()) {
+            StringBuffer msg = new StringBuffer();
             //获取错误文字集合
-            List<FieldError> fieldErrors=result.getFieldErrors();
+            List<FieldError> fieldErrors = result.getFieldErrors();
             //获取本地local,zh_CN
-            Locale currentLocale= LocaleContextHolder.getLocale();
+            Locale currentLocale = LocaleContextHolder.getLocale();
             //遍历错误字段信息
-            for(FieldError fieldError:fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 //获取错误信息
-                String errorMessage=messageSource.getMessage(fieldError,currentLocale);
+                String errorMessage = messageSource.getMessage(fieldError, currentLocale);
                 //添加到错误消息集合内
-                msg.append(fieldError.getField()+":"+errorMessage).append("-");
+                msg.append(fieldError.getField() + ":" + errorMessage).append("-");
                 break;
             }
 
-            throw new RuntimeException(StringUtils.substring(msg.toString(),0,msg.toString().length()-1));
+            throw new RuntimeException(StringUtils.substring(msg.toString(), 0, msg.toString().length() - 1));
         }
 
 

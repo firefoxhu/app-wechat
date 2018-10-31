@@ -21,29 +21,29 @@ public class NewsController {
 
 
     @GetMapping("recommend")
-    public ServerResponse recommend(@PageableDefault(size = 8) Pageable page){
+    public ServerResponse recommend(@PageableDefault(size = 8) Pageable page) {
 
-        if(page.getPageSize() > 10){
+        if (page.getPageSize() > 10) {
             return ServerResponse.failure("参数非法");
         }
 
-        try{
+        try {
             return ServerResponse.success(newsService.findRecommend(page));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }
 
     @GetMapping("category")
-    public ServerResponse list(@PageableDefault(size = 8) Pageable page, @RequestParam("typeId") String id){
+    public ServerResponse list(@PageableDefault(size = 8) Pageable page, @RequestParam("typeId") String id) {
 
-        if(page.getPageSize() > 10){
+        if (page.getPageSize() > 10) {
             return ServerResponse.failure("参数非法");
         }
 
-        try{
-            return ServerResponse.success(newsService.findByCategory(id,page));
-        }catch (Exception e){
+        try {
+            return ServerResponse.success(newsService.findByCategory(id, page));
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
 
@@ -51,40 +51,39 @@ public class NewsController {
 
 
     @GetMapping("fabulous")
-    public ServerResponse fabulous(String id){
+    public ServerResponse fabulous(String id) {
 
-        if(id == null){
+        if (id == null) {
             return ServerResponse.failure("参数非法");
         }
-        try{
+        try {
             newsService.modifyFabulous(id);
             return ServerResponse.success("ok");
-        }catch (Exception e){
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }
 
     @GetMapping("views")
-    public ServerResponse views(String id){
+    public ServerResponse views(String id) {
 
-        if(id == null){
+        if (id == null) {
             return ServerResponse.failure("参数非法");
         }
-        try{
+        try {
             newsService.modifyViews(id);
             return ServerResponse.success("ok");
-        }catch (Exception e){
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }
 
 
-
     @GetMapping("detail")
     public ServerResponse detail(String id) {
-        try{
+        try {
             return ServerResponse.success(newsService.findById(id));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }
@@ -93,15 +92,14 @@ public class NewsController {
      * 批量灌水
      * @return
 
-    @GetMapping("random")
-    public ServerResponse manager() {
-        try{
-            newsService.modifyFabulousAndViews();
-            return ServerResponse.success("ok");
-        }catch (Exception e){
-            return ServerResponse.failure(e.getMessage());
-        }
-    }
+     @GetMapping("random") public ServerResponse manager() {
+     try{
+     newsService.modifyFabulousAndViews();
+     return ServerResponse.success("ok");
+     }catch (Exception e){
+     return ServerResponse.failure(e.getMessage());
+     }
+     }
      */
 
 }

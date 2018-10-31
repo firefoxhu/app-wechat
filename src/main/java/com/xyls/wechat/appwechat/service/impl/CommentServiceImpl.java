@@ -1,4 +1,5 @@
 package com.xyls.wechat.appwechat.service.impl;
+
 import com.xyls.wechat.appwechat.dto.CommentDTO;
 import com.xyls.wechat.appwechat.dto.form.CommentForm;
 import com.xyls.wechat.appwechat.model.Comment;
@@ -25,29 +26,29 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
 
     @Override
-    public Map<String,Object> query(Pageable page, String id) {
-        page.getSortOr(new Sort(Sort.Direction.ASC,"createTime"));
+    public Map<String, Object> query(Pageable page, String id) {
+        page.getSortOr(new Sort(Sort.Direction.ASC, "createTime"));
 
-        Page<Comment> pageResult = commentRepository.findAll((root,query,criteriaBuilder)->{
+        Page<Comment> pageResult = commentRepository.findAll((root, query, criteriaBuilder) -> {
             Path<String> _newsId = root.get("newsId");
-            Predicate _key = criteriaBuilder.equal(_newsId,id);
+            Predicate _key = criteriaBuilder.equal(_newsId, id);
             return criteriaBuilder.and(_key);
-        },page);
+        }, page);
 
-        Map<String,Object> result = new HashMap();
+        Map<String, Object> result = new HashMap();
 
         result.put("hasNext", pageResult.hasNext());
 
-        result.put("list",pageResult.stream()
-                .map(e->new CommentDTO(e.getId(),e.getCommentator(),e.getContent(),e.getCreateTime()))
+        result.put("list", pageResult.stream()
+                .map(e -> new CommentDTO(e.getId(), e.getCommentator(), e.getContent(), e.getCreateTime()))
                 .collect(Collectors.toList()));
         return result;
     }
 
     @Override
-    public CommentDTO comment(HttpServletRequest request,CommentForm commentForm) {
+    public CommentDTO comment(HttpServletRequest request, CommentForm commentForm) {
         String ip = request.getRemoteAddr();
-        Comment comment = commentRepository.save(new Comment(GenKeyUtil.key(),"用户"+ip,commentForm.getId(),commentForm.getContent(),ip, DateUtil.todayDateTime()));
-        return new CommentDTO(comment.getId(),comment.getCommentator(),comment.getContent(),comment.getCreateTime());
+        Comment comment = commentRepository.save(new Comment(GenKeyUtil.key(), "用户" + ip, commentForm.getId(), commentForm.getContent(), ip, DateUtil.todayDateTime()));
+        return new CommentDTO(comment.getId(), comment.getCommentator(), comment.getContent(), comment.getCreateTime());
     }
 }

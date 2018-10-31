@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class SearchProcessor{
+public class SearchProcessor {
 
     @Autowired
     private NewsRepository newsRepository;
@@ -22,13 +22,13 @@ public class SearchProcessor{
     @Autowired
     private ProjectProperties projectProperties;
 
-    public Map<String,Object> search(String keyWord,Pageable pageable){
-        Page<News> page = newsRepository.findLikeByTitle(keyWord,pageable);
-        Map<String,Object> result =new HashMap<>();
+    public Map<String, Object> search(String keyWord, Pageable pageable) {
+        Page<News> page = newsRepository.findLikeByTitle(keyWord, pageable);
+        Map<String, Object> result = new HashMap<>();
 
-        result.put(MapKeyConst.HAS_NEXT,page.hasNext());
+        result.put(MapKeyConst.HAS_NEXT, page.hasNext());
 
-        result.put(MapKeyConst.LIST, News2DTOConvert.news2Dto(page,projectProperties.getFile().getUrlPrefix()));
+        result.put(MapKeyConst.LIST, News2DTOConvert.news2Dto(page, projectProperties.getFile().getUrlPrefix()));
 
         return result;
     }

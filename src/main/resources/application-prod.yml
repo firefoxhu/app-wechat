@@ -20,13 +20,13 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
-#####jpa 子项目无需关系表结构 只做操作####
+  #####jpa 子项目无需关系表结构 只做操作####
   jpa:
     generate-ddl: false
     show-sql: false
     hibernate:
       ddl-auto: none
-#############frremark############
+  #############frremark############
   mvc:
     static-path-pattern: /**
   resources:

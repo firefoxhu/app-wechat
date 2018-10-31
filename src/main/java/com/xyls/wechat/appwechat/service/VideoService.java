@@ -9,5 +9,5 @@ public interface VideoService {
     /**
      * 根据类别查找
      */
-    Map<String,Object> findByCategory(String category, Pageable pageable);
+    Map<String, Object> findByCategory(String category, Pageable pageable);
 }

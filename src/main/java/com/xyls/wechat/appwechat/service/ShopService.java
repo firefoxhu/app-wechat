@@ -7,7 +7,7 @@ import java.util.Map;
 public interface ShopService {
 
 
-    Map<String,Object> findShop(Pageable pageable);
+    Map<String, Object> findShop(Pageable pageable);
 
 
 }

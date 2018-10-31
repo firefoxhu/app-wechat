@@ -18,14 +18,14 @@ public class VideoController {
     private VideoService videoService;
 
     @GetMapping("list")
-    public ServerResponse list(@PageableDefault(size = 8) Pageable page,String categoryId){
-        if(page.getPageSize() > 10){
+    public ServerResponse list(@PageableDefault(size = 8) Pageable page, String categoryId) {
+        if (page.getPageSize() > 10) {
             return ServerResponse.failure("参数非法");
         }
 
-        try{
-            return ServerResponse.success(videoService.findByCategory(categoryId,page));
-        }catch (Exception e){
+        try {
+            return ServerResponse.success(videoService.findByCategory(categoryId, page));
+        } catch (Exception e) {
             return ServerResponse.failure(e.getMessage());
         }
     }

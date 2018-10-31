@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableScheduling
 public class AppWechatApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AppWechatApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AppWechatApplication.class, args);
+    }
 
 }

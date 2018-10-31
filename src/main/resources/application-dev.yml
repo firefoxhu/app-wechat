@@ -1,7 +1,7 @@
 server:
   port: 9001
 spring:
-################���ݿ�����##############
+  ################���ݿ�����##############
   datasource:
     url: jdbc:mysql://39.107.228.75:3306/xyls_db?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
     username: root
@@ -21,13 +21,13 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
-#####jpa 子项目无需关系表结构 只做操作####
+  #####jpa 子项目无需关系表结构 只做操作####
   jpa:
     generate-ddl: false
     show-sql: true
     hibernate:
       ddl-auto: none
-#############frremark############
+  #############frremark############
   mvc:
     static-path-pattern: /**
   resources:

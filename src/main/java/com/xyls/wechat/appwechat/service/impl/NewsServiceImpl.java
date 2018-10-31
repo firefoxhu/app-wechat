@@ -1,4 +1,5 @@
 package com.xyls.wechat.appwechat.service.impl;
+
 import com.xyls.wechat.appwechat.consts.MapKeyConst;
 import com.xyls.wechat.appwechat.dto.NewsDTO;
 import com.xyls.wechat.appwechat.dto.support.News2DTOConvert;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
 
 @Service
@@ -27,22 +29,22 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public Map<String,Object> findRecommend(Pageable pageable) {
+    public Map<String, Object> findRecommend(Pageable pageable) {
 
-        Map<String,Object>  result = new HashMap();
+        Map<String, Object> result = new HashMap();
 
-        Page<News> page=newsRepository.findRecommend(pageable);
+        Page<News> page = newsRepository.findRecommend(pageable);
 
-        result.put(MapKeyConst.HAS_NEXT,page.hasNext());
+        result.put(MapKeyConst.HAS_NEXT, page.hasNext());
 
-        result.put(MapKeyConst.LIST, News2DTOConvert.news2Dto(page,projectProperties.getFile().getUrlPrefix()));
+        result.put(MapKeyConst.LIST, News2DTOConvert.news2Dto(page, projectProperties.getFile().getUrlPrefix()));
 
-        return  result;
+        return result;
 
     }
 
     @Override
-    public Map<String, Object> findByCategory(String TypeId,Pageable pageable) {
+    public Map<String, Object> findByCategory(String TypeId, Pageable pageable) {
 
         Map<String, Object> result = new HashMap<>();
         Page<News> page = newsRepository.findByNewsTypeId(TypeId, pageable);
@@ -51,7 +53,6 @@ public class NewsServiceImpl implements NewsService {
 
         return result;
     }
-
 
 
     @Override
@@ -67,9 +68,9 @@ public class NewsServiceImpl implements NewsService {
         newsDTO.setAuthor(n.getNewsAuthor());
         newsDTO.setShowType(n.getNewsShowType());
         String[] origin = n.getNewsHomeThumbnail().split(",");
-        String[]  temp = new String[origin.length];
-        for(int i= 0;i<origin.length;i++){
-            temp[i] = projectProperties.getFile().getUrlPrefix()+origin[i];
+        String[] temp = new String[origin.length];
+        for (int i = 0; i < origin.length; i++) {
+            temp[i] = projectProperties.getFile().getUrlPrefix() + origin[i];
         }
         newsDTO.setImages(temp);
         newsDTO.setFabulous(n.getFabulous());
@@ -82,13 +83,13 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     @Override
     public void modifyFabulous(String id) {
-        newsRepository.modifyFabulous(String.valueOf(Integer.parseInt(newsRepository.findById(id).orElseThrow(RuntimeException::new).getFabulous())+1),id);
+        newsRepository.modifyFabulous(String.valueOf(Integer.parseInt(newsRepository.findById(id).orElseThrow(RuntimeException::new).getFabulous()) + 1), id);
     }
 
     @Transactional
     @Override
     public void modifyViews(String id) {
-        newsRepository.modifyViews(String.valueOf(Integer.parseInt(newsRepository.findById(id).orElseThrow(RuntimeException::new).getNewsViews())+1),id);
+        newsRepository.modifyViews(String.valueOf(Integer.parseInt(newsRepository.findById(id).orElseThrow(RuntimeException::new).getNewsViews()) + 1), id);
     }
 
     @Transactional
@@ -96,13 +97,13 @@ public class NewsServiceImpl implements NewsService {
     public void modifyFabulousAndViews() {
 
         List<News> newsList = newsRepository.findAll();
-        log.info("size:{}",newsList);
+        log.info("size:{}", newsList);
 
-        for(int i=0;i<newsList.size();i++){
-            int fabulous  = RandomUtils.nextInt(10,30);
-            int views = RandomUtils.nextInt(50,300);
-            log.info("标题：{} ，赞：{} ，浏览量：{}",newsList.get(i).getNewsTitle(),fabulous,views);
-            newsRepository.modifyFabulousAndViews(String.valueOf(fabulous),String.valueOf(views),newsList.get(i).getNewsId());
+        for (int i = 0; i < newsList.size(); i++) {
+            int fabulous = RandomUtils.nextInt(10, 30);
+            int views = RandomUtils.nextInt(50, 300);
+            log.info("标题：{} ，赞：{} ，浏览量：{}", newsList.get(i).getNewsTitle(), fabulous, views);
+            newsRepository.modifyFabulousAndViews(String.valueOf(fabulous), String.valueOf(views), newsList.get(i).getNewsId());
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

@@ -18,7 +18,7 @@ public class Post {
 
     @Id
     @Column(length = 32)
-    private String  pid;
+    private String pid;
 
     @Column(length = 256)
     private String content;
@@ -29,10 +29,10 @@ public class Post {
      * phone任意一种
      */
     @Column(length = 32)
-    private String  concat;
+    private String concat;
 
     @Column(length = 128)
-    private String  pic;
+    private String pic;
 
     @Column(length = 32)
     private String ip;
@@ -56,7 +56,6 @@ public class Post {
 
     @Column(length = 32)
     private String createTime;
-
 
 
 }
